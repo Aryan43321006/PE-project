@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Engineering Slogan Generator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 12px 20px;
+      font-size: 16px;
+      background: #2980b9;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #2471a3;
+    }
+
+    p#output {
+      margin-top: 20px;
+      background: #ecf0f1;
+      padding: 20px;
+      border-radius: 8px;
+      font-size: 18px;
+      color: #34495e;
+      text-align: center;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🛠️ Engineering Slogan Generator</h1>
+
+    <input type="text" id="fieldInput" placeholder="Enter your engineering field (e.g., Mechanical, Civil, AI)..." />
+    <button id="generateBtn">Generate Slogan</button>
+
+    <h2>📣 Your Slogan</h2>
+    <p id="output"></p>
+  </div>
+
+  <script>
+    document.getElementById("generateBtn").addEventListener("click", async () => {
+      const field = document.getElementById("fieldInput").value.trim();
+      const output = document.getElementById("output");
+
+      if (!field) {
+        output.textContent = "Please enter an engineering field.";
+        return;
+      }
+
+      output.textContent = "⏳ Generating slogan...";
+
+      try {
+        const res = await fetch("/api/slogan", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ field })
+        });
+
+        const data = await res.json();
+        output.textContent = data.slogan || "⚠️ No slogan generated.";
+      } catch (err) {
+        console.error(err);
+        output.textContent = "❌ Error contacting the slogan API.";
+      }
+    });
+  </script>
+</body>
+</html>
